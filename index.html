@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcul du Salaire - Votre Garage</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0b132b, #1c2541);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fca311;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #fca311;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    button {
+      background-color: #fca311;
+      color: #000;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #ffb703;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .highlight {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>💼 Calcul Salaire - "Votre Garage"</h1>
+
+    <form id="salaireForm">
+      <label for="specialite">Spécialité :</label>
+      <select id="specialite" required>
+        <option value="">-- Choisir une spécialité --</option>
+        <option value="mecanicien">Mécanicien</option>
+        <option value="soudeur">Soudeur</option>
+        <option value="peintre">Peintre</option>
+      </select>
+
+      <label for="anciennete">Ancienneté (en années) :</label>
+      <input type="number" id="anciennete" placeholder="Ex : 8" required min="0">
+
+      <label for="vehicules">Nombre de véhicules réparés :</label>
+      <input type="number" id="vehicules" placeholder="Ex : 5" required min="0">
+
+      <label for="plafond">Salaire plafond (FCFA) :</label>
+      <input type="number" id="plafond" placeholder="Ex : 100000" required min="0">
+
+      <button type="button" onclick="calculerSalaire()">Calculer le Salaire</button>
+    </form>
+
+    <div id="resultat" class="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    function calculerSalaire() {
+      const specialite = document.getElementById("specialite").value;
+      const anciennete = parseInt(document.getElementById("anciennete").value);
+      const vehicules = parseInt(document.getElementById("vehicules").value);
+      const plafond = parseFloat(document.getElementById("plafond").value);
+
+      if (!specialite || isNaN(anciennete) || isNaN(vehicules) || isNaN(plafond)) {
+        alert("Veuillez remplir tous les champs correctement !");
+        return;
+      }
+
+      let pourcentage = 0;
+      switch (specialite) {
+        case "mecanicien":
+          pourcentage = 0.9;
+          break;
+        case "soudeur":
+          pourcentage = 0.8;
+          break;
+        case "peintre":
+          pourcentage = 0.7;
+          break;
+      }
+
+      const salaireBase = plafond * pourcentage;
+      const primeAnciennete = (anciennete > 10) ? 8500 : 500;
+      const primeVehicules = vehicules * 2500;
+      const salaireTotal = salaireBase + primeAnciennete + primeVehicules;
+
+      document.getElementById("resultat").style.display = "block";
+      document.getElementById("resultat").innerHTML = `
+        <p><strong>Spécialité :</strong> <span class="highlight">${specialite}</span></p>
+        <p><strong>Salaire de base :</strong> <span class="highlight">${salaireBase.toLocaleString()} FCFA</span></p>
+        <p><strong>Prime d'ancienneté :</strong> <span class="highlight">${primeAnciennete.toLocaleString()} FCFA</span></p>
+        <p><strong>Prime d'encouragement :</strong> <span class="highlight">${primeVehicules.toLocaleString()} FCFA</span></p>
+        <hr>
+        <p><strong>Salaire total :</strong> <span class="highlight">${salaireTotal.toLocaleString()} FCFA</span></p>
+      `;
+    }
+  </script>
+</body>
+</html>
